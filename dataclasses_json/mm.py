@@ -245,9 +245,12 @@ def build_type(type_, options, mixin, field, cls):
 
         if is_dataclass(type_):
             if _issubclass_safe(type_, mixin):
-                options['field_many'] = bool(
-                    _is_supported_generic(field.type) and _is_collection(
-                        field.type))
+                metadata = {
+                    'field_many': bool(
+                        _is_supported_generic(field.type) and _is_collection(
+                            field.type))
+                }
+                options['metadata'] = metadata
                 return fields.Nested(type_.schema(), **options)
             else:
                 warnings.warn(f"Nested dataclass field {field.name} of type "
